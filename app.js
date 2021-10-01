@@ -5,7 +5,6 @@ const boysPath = path.join(__dirname, 'boys');
 const girlsPath = path.join(__dirname, 'girls');
 
 const getSort = (usersPathFirst, gender, usersPathSecond) => {
-  
   fs.readdir(usersPathFirst, ((err, data) => {
     if (err) {
       console.log(err);
@@ -13,22 +12,22 @@ const getSort = (usersPathFirst, gender, usersPathSecond) => {
     }
     
     data.forEach(fileName => {
-      
       fs.readFile(path.join(usersPathFirst, fileName), ((err, data) => {
-        let currentGender = JSON.parse(data).gender;
+        const currentGender = JSON.parse(data).gender;
         
         if (currentGender !== gender) {
           fs.rename(
             path.join(usersPathFirst, fileName),
             path.join(usersPathSecond, fileName),
-            (err) => console.log(err)
+            (err) => {
+               if(err) {
+                 console.log(err)
+              }
+            }
           )
         }
-        
       }))
-      
     })
-    
   }))
 }
 
