@@ -37,31 +37,34 @@ const getSortUsers = (users) => {
     if (user.age < 20 && user.gender === 'male') {
       const appendPathUserFile = path.join(__dirname, 'manYounger20', user.name + '.txt');
       
-      fs.writeFile(appendPathUserFile, `${userPrepare}`, (err => {
+      fs.writeFile(appendPathUserFile, userPrepare, (err => {
         if (err) {
           console.log(err);
         }
       }))
-    } else if (user.age > 20 && user.gender === 'male') {
+    }
+    if (user.age > 20 && user.gender === 'male') {
       const appendPathUserFile = path.join(__dirname, 'manOlder20', user.name + '.txt');
       
-      fs.writeFile(appendPathUserFile, `${userPrepare}`, (err => {
+      fs.writeFile(appendPathUserFile, userPrepare, (err => {
         if (err) {
           console.log(err);
         }
       }))
-    } else if (user.age < 20 && user.gender === 'female') {
+    }
+    if (user.age < 20 && user.gender === 'female') {
       const appendPathUserFile = path.join(__dirname, 'womanYounger20', user.name + '.txt');
       
-      fs.writeFile(appendPathUserFile, `${userPrepare}`, (err => {
+      fs.writeFile(appendPathUserFile, userPrepare, (err => {
         if (err) {
           console.log(err);
         }
       }))
-    } else if (user.age > 20 && user.gender === 'female') {
+    }
+    if (user.age > 20 && user.gender === 'female') {
       const appendPathUserFile = path.join(__dirname, 'womanOlder20', user.name + '.txt');
       
-      fs.writeFile(appendPathUserFile, `${userPrepare}`, (err => {
+      fs.writeFile(appendPathUserFile, userPrepare, (err => {
         if (err) {
           console.log(err);
         }
