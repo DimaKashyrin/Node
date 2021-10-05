@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const users = [
   {name: 'olga', gender: 'female', age: 21},
   {name: 'anton', gender: 'male', age: 27},
@@ -14,9 +17,6 @@ const foldersNameArr = [
   'womanOlder20',
   'womanYounger20'
 ]
-
-const fs = require('fs');
-const path = require('path');
 
 const buildFolders = (nameArr) => {
   nameArr.forEach(folderName => {
