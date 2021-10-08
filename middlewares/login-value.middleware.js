@@ -3,16 +3,16 @@ const User = require('../dataBase/User');
 module.exports = {
   checkUserLoginValue: async (req, res, next) => {
     try {
-      const userByEmail = await User.findOne({
-        email: req.body.email,
-        password:req.body.password}
-      );
+      const {email, password} = req.body;
+      const userByEmail = await User.findOne({email, password});
       
-      if(!userByEmail) {
+      if (!userByEmail) {
         throw new Error('wrong email or password!');
       }
+      
+      req.user = userByEmail;
       next();
-    }catch (err){
+    } catch (err) {
       res.json(err.message);
     }
   }
