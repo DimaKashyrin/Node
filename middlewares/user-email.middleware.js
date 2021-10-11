@@ -3,7 +3,7 @@ const userValidator = require('../validators/user.validator');
 
 module.exports = {
   
-  isUserBodyValid: (req,res,next) => {
+  isUserBodyValid: (req, res, next) => {
     try {
       const {error, value} = userValidator.createUserValidator.validate(req.body);
       

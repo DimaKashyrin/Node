@@ -8,7 +8,7 @@ module.exports = {
       const users = await User.find();
       
       res.json(users);
-    }catch (err){
+    } catch (err) {
       res.json(err.message);
     }
   },
@@ -21,7 +21,8 @@ module.exports = {
   
   createUser: async (req, res) => {
     try {
-      const hashedPassword = await passwordService.hash(req.body.password);
+      const {password} = req.body;
+      const hashedPassword = await passwordService.hash(password);
       const newUser = await User.create({...req.body, password: hashedPassword});
       
       res.json(newUser);

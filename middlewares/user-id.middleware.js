@@ -6,13 +6,12 @@ module.exports = {
     try {
       const {user_id} = req.params;
       const userById = await User.findById(user_id).lean();
-      const normalizedUser = userUtil.userNormalizator(userById);
       
       if (!userById) {
         throw new Error('the user with the specified id does not exist');
       }
-      
-      req.user = normalizedUser;
+  
+      req.user = userUtil.userNormalizator(userById);
       next();
     } catch (err) {
       res.json(err.message);
