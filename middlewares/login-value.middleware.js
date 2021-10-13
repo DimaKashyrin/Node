@@ -1,6 +1,6 @@
 const User = require('../dataBase/User');
-const passwordService = require("../service/password.service");
-const userValidator = require("../validators/user-login.validator");
+const passwordService = require('../service/password.service');
+const userValidator = require('../validators/user-login.validator');
 
 module.exports = {
   

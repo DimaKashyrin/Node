@@ -1,4 +1,5 @@
 const Joi = require('joi');
+
 const { EMAIL_REGEXP, PASSWORD_REGEXP } = require('../configs/constans');
 
 const checkLoginFields = Joi.object({

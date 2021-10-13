@@ -22,8 +22,8 @@ module.exports = {
     try {
       const { password } = req.body;
       const hashedPassword = await passwordService.hash(password);
-      const newUser = await User.create({...req.body, password: hashedPassword});
-      const normalizerUser = normalizer.userNormalizer(newUser);
+      const newUser = await User.create({ ...req.body, password: hashedPassword });
+      const normalizerUser = normalizer.userNormalizer(newUser.toObject());
       
       res.json(normalizerUser);
     } catch (err) {
@@ -31,12 +31,15 @@ module.exports = {
     }
   },
   
-  updateUserName: (req, res) => {
+  updateUserName: async (req, res) => {
     try {
       const { name: newName } = req.body;
-      const updateUser = { ...req.user, name: newName };
       
-      res.json(updateUser);
+      await User.findOneAndUpdate({ ...req.user },
+        { ...req.user, name: newName }
+      );
+      
+      res.json(`you changed your name to: ${newName}`);
     } catch (err) {
       res.json(err.message);
     }

@@ -8,7 +8,7 @@ module.exports = {
       const usersDB = await User.find().lean();
       const usersPrepare = [];
       
-      if (usersDB) {
+      if (usersDB.length) {
         usersDB.forEach((user) => {
           usersPrepare.push(normalizer.userNormalizer(user));
         });
