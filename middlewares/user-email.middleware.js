@@ -1,5 +1,5 @@
 const User = require('../dataBase/User');
-const userValidator = require('../validators/user.validator');
+const { userValidator } = require('../validators');
 
 module.exports = {
   
@@ -8,13 +8,16 @@ module.exports = {
       const { error, value } = userValidator.createUserValidator.validate(req.body);
       
       if (error) {
-        throw new Error(error.details[0].message);
+        next({
+          message: error.details[0].message,
+          status: 404
+        });
       }
       
       req.body = value;
       next();
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   },
   
@@ -24,12 +27,15 @@ module.exports = {
       const userByEmail = await User.findOne({ email });
       
       if (userByEmail) {
-        throw new Error('Email already exist');
+        next({
+          message: 'Email already exist',
+          status: 406
+        });
       }
       
       next();
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   }
 };

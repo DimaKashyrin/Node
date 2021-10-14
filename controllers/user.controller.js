@@ -4,11 +4,11 @@ const normalizer = require('../util/user.util');
 
 module.exports = {
   
-  getUsers: (req, res) => {
+  getUsers: (req, res, next) => {
     try {
       res.json(req.users || 'db is empty');
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   },
   
@@ -18,7 +18,7 @@ module.exports = {
     res.json({ user });
   },
   
-  createUser: async (req, res) => {
+  createUser: async (req, res, next) => {
     try {
       const { password } = req.body;
       const hashedPassword = await passwordService.hash(password);
@@ -27,11 +27,11 @@ module.exports = {
       
       res.json(normalizerUser);
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   },
   
-  updateUserName: async (req, res) => {
+  updateUserName: async (req, res, next) => {
     try {
       const { user_id } = req.params;
       
@@ -45,11 +45,11 @@ module.exports = {
       
       res.json(normaliserUpdateUser);
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   },
   
-  delUser: async (req, res) => {
+  delUser: async (req, res, next) => {
     try {
       const { _id } = req.user;
       const dellUserId = await User.findOneAndDelete({ _id }).lean();
@@ -57,7 +57,7 @@ module.exports = {
       
       res.json(normaliserDellUser);
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   }
 };

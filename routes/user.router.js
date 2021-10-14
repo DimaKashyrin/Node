@@ -1,24 +1,26 @@
 const router = require('express').Router();
 
-const userController = require('../controllers/user.controller');
-const checkUserEmail = require('../middlewares/user-email.middleware');
-const checkId = require('../middlewares/user-id.middleware');
-const checkName = require('../middlewares/user-name.middleware');
-const hidePassword = require('../middlewares/users-password.middleware');
+const { userController } = require('../controllers');
+const {
+  userEmailMiddleware,
+  userIdMiddleware,
+  userNameMiddleware,
+  userPasswordMiddleware
+} = require('../middlewares');
 
-router.get('/', hidePassword.excludePasswords, userController.getUsers);
+router.get('/', userPasswordMiddleware.excludePasswords, userController.getUsers);
 router.post('/',
-  checkUserEmail.isUserBodyValid,
-  checkUserEmail.createUserEmail,
+  userEmailMiddleware.isUserBodyValid,
+  userEmailMiddleware.createUserEmail,
   userController.createUser
 );
 
-router.get('/:user_id', checkId.checkUserId, userController.getUserById);
+router.get('/:user_id', userIdMiddleware.checkUserId, userController.getUserById);
 router.patch('/:user_id',
-  checkName.checkUserName,
-  checkId.checkUserId,
+  userNameMiddleware.checkUserName,
+  userIdMiddleware.checkUserId,
   userController.updateUserName
 );
-router.delete('/:user_id', checkId.checkUserId, userController.delUser);
+router.delete('/:user_id', userIdMiddleware.checkUserId, userController.delUser);
 
 module.exports = router;

@@ -1,12 +1,12 @@
 const router = require('express').Router();
 
-const loginController = require('../controllers/login.controller');
-const checkUserLoginMiddleware = require('../middlewares/login-value.middleware');
+const { loginController } = require('../controllers');
+const { loginMiddleware } = require('../middlewares/');
 
 router.post('/',
-  checkUserLoginMiddleware.checkUserValuesValid,
-  checkUserLoginMiddleware.checkUserEmail,
-  checkUserLoginMiddleware.checkUserPassword,
+  loginMiddleware.checkUserValuesValid,
+  loginMiddleware.checkUserEmail,
+  loginMiddleware.checkUserPassword,
   loginController.loginUser
 );
 

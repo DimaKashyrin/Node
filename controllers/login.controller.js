@@ -5,7 +5,7 @@ module.exports = {
       
       res.json(`Welcome, ${ name }`);
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   }
 };

@@ -18,7 +18,7 @@ module.exports = {
   
       next();
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   }
 };

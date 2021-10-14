@@ -8,13 +8,16 @@ module.exports = {
       const userById = await User.findById(user_id).lean();
       
       if (!userById) {
-        throw new Error('the user with the specified id does not exist');
+        next({
+          message:'the user with the specified id does not exist',
+          status: 406
+        });
       }
       
       req.user = userUtil.userNormalizer(userById);
       next();
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   }
 };

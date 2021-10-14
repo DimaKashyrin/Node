@@ -1,19 +1,22 @@
-const userValidator = require('../validators/user-name.validator');
+const { userName } = require('../validators');
 
 module.exports = {
   
   checkUserName: (req, res, next) => {
     try {
-      const { error, value } = userValidator.checkUserName.validate(req.body);
+      const { error, value } = userName.checkUserName.validate(req.body);
       
       if (error) {
-        throw new Error(error.details[0].message);
+        next({
+          message:error.details[0].message,
+          status: 406
+        });
       }
       
       req.body = value;
       next();
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   }
 };

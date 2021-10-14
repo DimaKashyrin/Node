@@ -1,21 +1,25 @@
 const User = require('../dataBase/User');
 const passwordService = require('../service/password.service');
-const userValidator = require('../validators/user-login.validator');
+const { userLogin } = require('../validators');
 
 module.exports = {
   
   checkUserValuesValid: (req, res, next) => {
     try {
-      const { error, value } = userValidator.checkLoginFields.validate(req.body);
+      const { error, value } = userLogin.checkLoginFields.validate(req.body);
       
       if (error) {
-        throw new Error('wrong email or password!');
+        next({
+          message: 'Incorrect data (A,!,_,$,-,3)!',
+          status: 404
+        });
+        return;
       }
       
       req.body = value;
       next();
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   },
   
@@ -25,13 +29,17 @@ module.exports = {
       const userByEmail = await User.findOne({ email });
       
       if (!userByEmail) {
-        throw new Error('wrong email or password!');
+        next({
+          message: 'Wrong email or password!',
+          status: 404
+        });
+        return;
       }
       
       req.user = userByEmail;
       next();
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   },
   
@@ -43,7 +51,7 @@ module.exports = {
       await passwordService.compare(password, hashPassword);
       next();
     } catch (err) {
-      res.json(err.message);
+      next(err);
     }
   }
 };
