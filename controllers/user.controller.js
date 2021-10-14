@@ -33,13 +33,17 @@ module.exports = {
   
   updateUserName: async (req, res) => {
     try {
-      const { name: newName } = req.body;
+      const { user_id: _id } = req.params;
       
-      await User.findOneAndUpdate({ ...req.user },
-        { ...req.user, name: newName }
-      );
+      const updateUser = await User.findByIdAndUpdate(
+        { _id },
+        { ...req.body },
+        { new:true }
+      ).lean();
       
-      res.json(`you changed your name to: ${newName}`);
+      const normaliserUpdateUser = normalizer.userNormalizer(updateUser);
+      
+      res.json(normaliserUpdateUser);
     } catch (err) {
       res.json(err.message);
     }
