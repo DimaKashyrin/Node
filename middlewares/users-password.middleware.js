@@ -14,8 +14,9 @@ module.exports = {
         });
         
         req.users = usersPrepare;
-        next();
       }
+  
+      next();
     } catch (err) {
       res.json(err.message);
     }

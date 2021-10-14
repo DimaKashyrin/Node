@@ -6,7 +6,7 @@ module.exports = {
   
   getUsers: (req, res) => {
     try {
-      res.json(req.users);
+      res.json(req.users || 'db is empty');
     } catch (err) {
       res.json(err.message);
     }
