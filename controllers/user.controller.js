@@ -33,12 +33,12 @@ module.exports = {
   
   updateUserName: async (req, res) => {
     try {
-      const { user_id: _id } = req.params;
+      const { user_id } = req.params;
       
       const updateUser = await User.findByIdAndUpdate(
-        { _id },
-        { ...req.body },
-        { new:true }
+        user_id,
+        req.body,
+        { new: true }
       ).lean();
       
       const normaliserUpdateUser = normalizer.userNormalizer(updateUser);
