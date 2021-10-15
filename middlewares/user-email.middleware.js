@@ -1,8 +1,8 @@
 const User = require('../dataBase/User');
 const { userValidator } = require('../validators');
+const { errorMessage:{ badRequest, alreadyExist } } = require('../errors');
 
 module.exports = {
-  
   isUserBodyValid: (req, res, next) => {
     try {
       const { error, value } = userValidator.createUserValidator.validate(req.body);
@@ -10,7 +10,7 @@ module.exports = {
       if (error) {
         next({
           message: error.details[0].message,
-          status: 403
+          status: badRequest[1]
         });
       }
       
@@ -28,8 +28,8 @@ module.exports = {
       
       if (userByEmail) {
         next({
-          message: 'Email already exist',
-          status: 406
+          message: alreadyExist[0],
+          status: alreadyExist[1]
         });
       }
       

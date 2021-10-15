@@ -1,17 +1,17 @@
 const User = require('../dataBase/User');
 const passwordService = require('../service/password.service');
 const { userLogin } = require('../validators');
+const { errorMessage:{ badRequest, wrongEorP } } = require('../errors');
 
 module.exports = {
-  
   checkUserValuesValid: (req, res, next) => {
     try {
       const { error, value } = userLogin.checkLoginFields.validate(req.body);
       
       if (error) {
         next({
-          message: 'Incorrect data (A,!,_,$,-,3)!',
-          status: 404
+          message: error.details[0].message,
+          status: badRequest[1]
         });
         return;
       }
@@ -30,8 +30,8 @@ module.exports = {
       
       if (!userByEmail) {
         next({
-          message: 'Wrong email or password!',
-          status: 404
+          message: wrongEorP[0],
+          status: wrongEorP[1]
         });
         return;
       }

@@ -1,12 +1,12 @@
 const User = require('../dataBase/User');
 const passwordService = require('../service/password.service');
 const normalizer = require('../util/user.util');
+const { errorMessage: { bdEmpty } } = require('../errors');
 
 module.exports = {
-  
   getUsers: (req, res, next) => {
     try {
-      res.json(req.users || 'db is empty');
+      res.json(req.users || bdEmpty[0]);
     } catch (err) {
       next(err);
     }

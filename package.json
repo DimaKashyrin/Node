@@ -6,10 +6,10 @@
     "express": "^4.17.1",
     "joi": "^17.4.2",
     "mongoose": "^6.0.10",
-    "pm2": "^5.1.2"
+    "pm2": "^5.1.2",
+    "dotenv": "^10.0.0"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.24.2",
