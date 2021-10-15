@@ -10,7 +10,7 @@ module.exports = {
       if (error) {
         next({
           message: error.details[0].message,
-          status: 404
+          status: 403
         });
       }
       
