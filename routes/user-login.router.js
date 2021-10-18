@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { loginController } = require('../controllers');
-const { loginMiddleware } = require('../middlewares/');
+const { loginMiddleware, userTokenMiddleware } = require('../middlewares/');
 
 router.post('/',
   loginMiddleware.checkUserValuesValid,
@@ -9,5 +9,6 @@ router.post('/',
   loginMiddleware.checkUserPassword,
   loginController.loginUser
 );
+router.delete('/', userTokenMiddleware.checkAccessToken, loginController.delAccount);
 
 module.exports = router;

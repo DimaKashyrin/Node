@@ -1,4 +1,4 @@
-const User = require('../dataBase/User');
+const { User } = require('../dataBase');
 const passwordService = require('../service/password.service');
 const { userLogin } = require('../validators');
 const { errorMessage:{ badRequest: { status }, wrongEorP } } = require('../errors');
@@ -26,7 +26,7 @@ module.exports = {
   checkUserEmail: async (req, res, next) => {
     try {
       const { email } = req.body;
-      const userByEmail = await User.findOne({ email });
+      const userByEmail = await User.findOne({ email }).lean();
       
       if (!userByEmail) {
         next(wrongEorP);

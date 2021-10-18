@@ -1,4 +1,4 @@
-const User = require('../dataBase/User');
+const { User } = require('../dataBase');
 const passwordService = require('../service/password.service');
 const normalizer = require('../util/user.util');
 const { errorMessage: { bdEmpty } } = require('../errors');
@@ -59,5 +59,5 @@ module.exports = {
     } catch (err) {
       next(err);
     }
-  }
+  },
 };

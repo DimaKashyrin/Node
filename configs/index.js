@@ -1,5 +1,6 @@
 module.exports = {
   config: require('./config'),
   constants: require('./constans'),
-  userRoles: require('./user-roles.enum')
+  userRoles: require('./user-roles.enum'),
+  tokenTYpe: require('./token-type.enum')
 };

@@ -1,6 +1,6 @@
 const { Types } = require("mongoose");
 
-const User = require('../dataBase/User');
+const { User } = require('../dataBase');
 const userUtil = require('../util/user.util');
 const { errorMessage: { idNotExist, badRequest } }= require('../errors');
 
