@@ -1,23 +1,29 @@
 module.exports = {
-  badRequest: [
-    'Bad Request',
-    400
-  ],
-  notFound: [
-    'Not Found',
-    404
-  ],
-  wrongEorP: [
-    'Wrong email or password!',
-    404
-  ],
-  alreadyExist: [
-    'Email already exist',
-    403
-  ],
-  idNotExist: [
-    'the user with the specified id does not exist',
-    404
-  ],
-  bdEmpty: ['data base is empty']
+  badRequest: {
+    message:'Bad Request!',
+    status: 400,
+  },
+  notFound: {
+    message:'Not Found',
+    status: 404,
+  },
+  wrongEorP: {
+    message:'Wrong email or password!',
+    status: 404,
+  },
+  alreadyExist: {
+    message:'Email already exist',
+    status: 400,
+  },
+  idNotExist: {
+    message:'the user with the specified id does not exist',
+    status: 404,
+  },
+  accessDenied: {
+    message:'Access denied!',
+    status: 403,
+  },
+  bdEmpty: {
+    message: 'data base is empty'
+  },
 };

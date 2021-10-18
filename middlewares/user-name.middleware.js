@@ -1,5 +1,5 @@
 const { userName } = require('../validators');
-const { errorMessage: { badRequest } } = require('../errors');
+const { errorMessage: { badRequest: { status } } } = require('../errors');
 
 module.exports = {
   checkUserName: (req, res, next) => {
@@ -9,7 +9,7 @@ module.exports = {
       if (error) {
         next({
           message:error.details[0].message,
-          status: badRequest[1]
+          status
         });
       }
       

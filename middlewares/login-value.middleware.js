@@ -1,7 +1,7 @@
 const User = require('../dataBase/User');
 const passwordService = require('../service/password.service');
 const { userLogin } = require('../validators');
-const { errorMessage:{ badRequest, wrongEorP } } = require('../errors');
+const { errorMessage:{ badRequest: { status }, wrongEorP } } = require('../errors');
 
 module.exports = {
   checkUserValuesValid: (req, res, next) => {
@@ -11,7 +11,7 @@ module.exports = {
       if (error) {
         next({
           message: error.details[0].message,
-          status: badRequest[1]
+          status
         });
         return;
       }
@@ -29,10 +29,7 @@ module.exports = {
       const userByEmail = await User.findOne({ email });
       
       if (!userByEmail) {
-        next({
-          message: wrongEorP[0],
-          status: wrongEorP[1]
-        });
+        next(wrongEorP);
         return;
       }
       

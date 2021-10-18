@@ -1,18 +1,25 @@
+const { Types } = require("mongoose");
+
 const User = require('../dataBase/User');
 const userUtil = require('../util/user.util');
-const { errorMessage: { idNotExist } } = require('../errors');
+const { errorMessage: { idNotExist, badRequest } }= require('../errors');
 
 module.exports = {
   checkUserId: async (req, res, next) => {
     try {
       const { user_id } = req.params;
-      const userById = await User.findById(user_id).exec();
+      const isIdValid = Types.ObjectId.isValid( user_id );
+      
+      if (!isIdValid) {
+        next(badRequest);
+        return;
+      }
+  
+      const userById = await User.findById(user_id).lean();
       
       if (!userById) {
-        next({
-          message: idNotExist[0],
-          status: idNotExist[1]
-        });
+        next(idNotExist);
+        return;
       }
       
       req.user = userUtil.userNormalizer(userById);

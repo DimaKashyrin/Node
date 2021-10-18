@@ -1,6 +1,6 @@
 const User = require('../dataBase/User');
 const { userValidator } = require('../validators');
-const { errorMessage:{ badRequest, alreadyExist } } = require('../errors');
+const { errorMessage:{ badRequest: { status }, alreadyExist } } = require('../errors');
 
 module.exports = {
   isUserBodyValid: (req, res, next) => {
@@ -10,7 +10,7 @@ module.exports = {
       if (error) {
         next({
           message: error.details[0].message,
-          status: badRequest[1]
+          status
         });
       }
       
@@ -27,10 +27,7 @@ module.exports = {
       const userByEmail = await User.findOne({ email });
       
       if (userByEmail) {
-        next({
-          message: alreadyExist[0],
-          status: alreadyExist[1]
-        });
+        next(alreadyExist);
       }
       
       next();

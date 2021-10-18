@@ -6,7 +6,7 @@ const { errorMessage: { bdEmpty } } = require('../errors');
 module.exports = {
   getUsers: (req, res, next) => {
     try {
-      res.json(req.users || bdEmpty[0]);
+      res.json(req.users || bdEmpty);
     } catch (err) {
       next(err);
     }
