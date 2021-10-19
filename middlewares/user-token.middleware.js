@@ -1,6 +1,13 @@
-const { constants: { AUTHORIZATION } } = require('../configs');
+const {
+  constants: {
+    AUTHORIZATION
+  },
+  tokenType: {
+    REFRESH
+  }
+} = require('../configs');
 const { jwtService } = require('../service');
-const ErrorHandler = require('../errors/ErrorHandler');
+const { errorMessage: { unauthorized } } = require('../errors');
 const { O_Auth } = require('../dataBase');
 
 module.exports = {
@@ -9,7 +16,8 @@ module.exports = {
       const token = req.get(AUTHORIZATION);
   
       if(!token){
-        throw new ErrorHandler('invalid token', 401);
+        next(unauthorized);
+        return;
       }
       
       await jwtService.verifyToken(token);
@@ -19,8 +27,38 @@ module.exports = {
       ).populate('user_id');
       
       if(!tokenResponse) {
-        throw new ErrorHandler('invalid token', 401);
+        next(unauthorized);
+        return;
       }
+      
+      req.user = tokenResponse.user_id;
+      next();
+    } catch (err) {
+      next(err);
+    }
+  },
+  
+  checkRefreshToken: async (req, res, next) => {
+    try {
+      const token = req.get(AUTHORIZATION);
+      
+      if(!token){
+        next(unauthorized);
+        return;
+      }
+      
+      await jwtService.verifyToken(token, REFRESH);
+      
+      const tokenResponse = await O_Auth.findOne(
+        { refresh_token: token}
+      ).populate('user_id');
+      
+      if(!tokenResponse) {
+        next(unauthorized);
+        return;
+      }
+  
+      await O_Auth.remove({ refresh_token: token });
       
       req.user = tokenResponse.user_id;
       next();

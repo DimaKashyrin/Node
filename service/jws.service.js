@@ -5,7 +5,7 @@ const {
     JWT_ACCESS_SECRET,
     JWT_REFRESH_SECRET
   },
-  tokenTYpe: { ACCESS }
+  tokenType: { ACCESS }
 } = require('../configs');
 const ErrorHandler = require('../errors/ErrorHandler');
 

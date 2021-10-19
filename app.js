@@ -6,7 +6,7 @@ const {
   config:{ MONGO_CONNECT_URL ,PORT },
   constants:{ DEFAULT_STATUS },
 }= require('./configs');
-const {userRouter, loginRouter} = require('./routes');
+const {userRouter , authRouter} = require('./routes');
 
 mongoose.connect(MONGO_CONNECT_URL);
 
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use('/users', userRouter);
-app.use('/login', loginRouter);
+app.use('/auth', authRouter);
 // eslint-disable-next-line no-unused-vars
 app.use('*',(err, req, res, next) => {
   res

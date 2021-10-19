@@ -12,6 +12,7 @@ module.exports = {
           message: error.details[0].message,
           status
         });
+        return;
       }
       
       req.body = value;
@@ -28,6 +29,7 @@ module.exports = {
       
       if (userByEmail) {
         next(alreadyExist);
+        return;
       }
       
       next();

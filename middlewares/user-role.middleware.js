@@ -7,6 +7,7 @@ module.exports = {
 
       if(!roleArr.includes(role)) {
         next(accessDenied);
+        return;
       }
       
       next();
