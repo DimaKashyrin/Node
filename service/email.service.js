@@ -11,12 +11,11 @@ const templateParser = new EmailTemplates({
   }
 });
 
-
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: NO_REPLY_EMAIL,//email з якого відправлення листа
-    pass: NO_REPLY_EMAIL_PASSWORD,//пароль
+    user: NO_REPLY_EMAIL,
+    pass: NO_REPLY_EMAIL_PASSWORD,
   }
 });
 
@@ -27,10 +26,10 @@ const sendMail = async (userMail, emailAction, context) => {
   }
   const html = await templateParser.render(templateInfo.templateName, context);
   return transporter.sendMail({
-    from: 'No reply',// імя хто надсилає
-    to: userMail,// адресат кому надсилають
-    subject: templateInfo.subject,//тема
-    html// сам лист
+    from: 'No reply',
+    to: userMail,
+    subject: templateInfo.subject,
+    html
   });
 };
 

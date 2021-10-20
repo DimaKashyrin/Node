@@ -1,4 +1,6 @@
 module.exports = {
   WELCOME: 'welcome',
-  ORDER: 'order'
+  CHANGE_NAME: 'changeName',
+  LOGIN: 'login',
+  DELETE_ACCOUNT: 'deleteAccount'
 };

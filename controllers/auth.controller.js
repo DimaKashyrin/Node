@@ -1,7 +1,15 @@
-const { jwtService } = require('../service');
+const { jwtService, emailService} = require('../service');
 const { userNormalizer } = require('../util/user.util');
 const { O_Auth, User } = require('../dataBase');
-const { constants: { AUTHORIZATION } } = require('../configs');
+const {
+  constants: {
+    AUTHORIZATION
+  },
+  emailAction: {
+    LOGIN,
+    DELETE_ACCOUNT
+  }
+} = require('../configs');
 const { errorMessage: { unauthorized } } = require('../errors');
 
 module.exports = {
@@ -15,7 +23,8 @@ module.exports = {
         ...tokenPair,
         user_id: userPrepare._id
       });
-      
+      await emailService.sendMail(req.user.email, LOGIN);
+  
       res.json({
         user: userPrepare,
         ...tokenPair
@@ -63,11 +72,13 @@ module.exports = {
   
   deleteAccount: async (req, res, next) => {
     try {
-      const { _id: user_id } = req.user;
+      const { _id: user_id, name } = req.user;
       
       await User.remove({ user_id });
       await O_Auth.remove({ user_id });
-      
+  
+      await emailService.sendMail(req.user.email, DELETE_ACCOUNT,{ name });
+  
       res.json({
         id: user_id ,
         message: 'user has been deleted'

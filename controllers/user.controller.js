@@ -2,7 +2,7 @@ const { User } = require('../dataBase');
 const { passwordService, emailService } = require('../service');
 const normalizer = require('../util/user.util');
 const { errorMessage: { bdEmpty } } = require('../errors');
-const { emailAction: { WELCOME } }= require("../configs");
+const { emailAction: { WELCOME, CHANGE_NAME } }= require("../configs");
 
 module.exports = {
   getUsers: (req, res, next) => {
@@ -38,6 +38,7 @@ module.exports = {
   updateUserName: async (req, res, next) => {
     try {
       const { user_id } = req.params;
+      const { name } = req.body;
       
       const updateUser = await User.findByIdAndUpdate(
         user_id,
@@ -46,6 +47,8 @@ module.exports = {
       ).lean();
       
       const normaliserUpdateUser = normalizer.userNormalizer(updateUser);
+  
+      await emailService.sendMail(req.user.email, CHANGE_NAME,{ name });
       
       res.json(normaliserUpdateUser);
     } catch (err) {

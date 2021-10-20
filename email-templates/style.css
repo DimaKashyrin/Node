@@ -1,4 +1,9 @@
 .footer {
     border: 1px solid lightblue;
-    background-color: lightgray;
+    background-color: #faf8f8;
+    text-align: center;
+}
+.header {
+    color: #f5d6d6;
+    text-align: center;
 }
