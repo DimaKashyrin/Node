@@ -10,7 +10,7 @@ const {
     DELETE_ACCOUNT
   }
 } = require('../configs');
-const { errorMessage: { unauthorized } } = require('../errors');
+const { errorMessage: { unauthorized, noContent } } = require('../errors');
 
 module.exports = {
   login: async (req, res, next) => {
@@ -74,15 +74,12 @@ module.exports = {
     try {
       const { _id: user_id, name } = req.user;
       
-      await User.remove({ user_id });
-      await O_Auth.remove({ user_id });
+      await User.deleteOne({ user_id });
+      await O_Auth.deleteMany({ user_id });
   
       await emailService.sendMail(req.user.email, DELETE_ACCOUNT,{ name });
   
-      res.json({
-        id: user_id ,
-        message: 'user has been deleted'
-      });
+      res.sendStatus(noContent.status);
     }catch (err) {
       next(err);
     }

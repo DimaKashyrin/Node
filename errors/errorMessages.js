@@ -1,10 +1,18 @@
 module.exports = {
-  alreadyExist: {
-    message:'Email already exist',
-    status: 400,
+  created: {
+    message:'created',
+    status: 201,
+  },
+  noContent: {
+    message: 'No Content',
+    status: 204
   },
   badRequest: {
     message:'Bad Request!',
+    status: 400,
+  },
+  wrongEorP: {
+    message:'Wrong email or password!',
     status: 400,
   },
   unauthorized: {
@@ -19,15 +27,15 @@ module.exports = {
     message:'Not Found',
     status: 404,
   },
-  wrongEorP: {
-    message:'Wrong email or password!',
-    status: 404,
-  },
   idNotExist: {
     message:'the user with the specified id does not exist',
     status: 404,
   },
-  bdEmpty: {
-    message: 'data base is empty'
+  alreadyExist: {
+    message:'Email already exist',
+    status: 409,
   },
+  templateName: {
+    message: 'wrong template name'
+  }
 };

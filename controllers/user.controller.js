@@ -1,15 +1,20 @@
-const { User } = require('../dataBase');
+const { User, O_Auth } = require('../dataBase');
 const { passwordService, emailService } = require('../service');
 const normalizer = require('../util/user.util');
-const { errorMessage: { bdEmpty } } = require('../errors');
 const { emailAction: { WELCOME, CHANGE_NAME } }= require("../configs");
+const { errorMessage: { created, noContent } } = require('../errors');
 
 module.exports = {
-  getUsers: (req, res, next) => {
-    try {
-      res.json(req.users || bdEmpty);
-    } catch (err) {
-      next(err);
+  getUsers: async (req, res) => {
+    const usersDB = await User.find().lean();
+    const usersPrepare = [];
+
+    if (usersDB.length) {
+      usersDB.forEach((user) => {
+        usersPrepare.push(normalizer.userNormalizer(user));
+      });
+      
+      res.json(usersPrepare);
     }
   },
   
@@ -29,7 +34,7 @@ module.exports = {
       const newUser = await User.create({ ...req.body, password: hashedPassword });
       const normalizerUser = normalizer.userNormalizer(newUser.toObject());
       
-      res.json(normalizerUser);
+      res.status(created.status).json(normalizerUser);
     } catch (err) {
       next(err);
     }
@@ -50,7 +55,7 @@ module.exports = {
   
       await emailService.sendMail(req.user.email, CHANGE_NAME,{ name });
       
-      res.json(normaliserUpdateUser);
+      res.status(created.status).json(normaliserUpdateUser);
     } catch (err) {
       next(err);
     }
@@ -59,10 +64,11 @@ module.exports = {
   delUser: async (req, res, next) => {
     try {
       const { _id } = req.user;
-      const dellUserId = await User.findOneAndDelete({ _id }).lean();
-      const normaliserDellUser = normalizer.userNormalizer(dellUserId);
       
-      res.json(normaliserDellUser);
+      await User.deleteOne({ _id });
+      await O_Auth.deleteMany({ user_id: _id });
+      
+      res.sendStatus(noContent.status);
     } catch (err) {
       next(err);
     }

@@ -5,13 +5,11 @@ const {
   userEmailMiddleware,
   userIdMiddleware,
   userNameMiddleware,
-  userPasswordMiddleware,
   userRolesMiddleware
 } = require('../middlewares');
 const { userRoles:{ ADMIN, MANAGER } } = require('../configs');
 
 router.get('/',
-  userPasswordMiddleware.excludePasswords,
   userController.getUsers
 );
 router.post('/',

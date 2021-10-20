@@ -4,6 +4,7 @@ const path = require('path');
 
 const { NO_REPLY_EMAIL, NO_REPLY_EMAIL_PASSWORD } = require('../configs/config');
 const allTemplates = require('../email-templates');
+const { ErrorHandler, errorMessage: { templateName } } = require('../errors');
 
 const templateParser = new EmailTemplates({
   views: {
@@ -22,7 +23,7 @@ const transporter = nodemailer.createTransport({
 const sendMail = async (userMail, emailAction, context) => {
   const templateInfo = allTemplates[emailAction];
   if(!templateInfo){
-    throw new Error('Wrong template name!!!');
+    throw new ErrorHandler(templateName);
   }
   const html = await templateParser.render(templateInfo.templateName, context);
   return transporter.sendMail({
