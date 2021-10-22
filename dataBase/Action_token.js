@@ -1,5 +1,5 @@
 const {Schema, model} = require('mongoose');
-const { actionTokenType } = require('../configs');
+const { tokenType } = require('../configs');
 
 const actionTokenSchema = new Schema({
   token: {
@@ -10,7 +10,7 @@ const actionTokenSchema = new Schema({
   token_type: {
     type: String,
     required: true,
-    enum: Object.values(actionTokenType),
+    enum: Object.values(tokenType),
     trim: true
   },
   user_id: {

@@ -22,7 +22,7 @@ const {
   },
   ErrorHandler
 } = require('../errors');
-const { FORGOT_PASSWORD } = require("../configs/action-token-type.enum");
+const { tokenType:{ FORGOT_PASSWORD } } = require("../configs/");
 
 
 module.exports = {
@@ -131,8 +131,18 @@ module.exports = {
   setNewPasswordAfterForgot: (req, res, next) => {
     try {
       const actionToken = req.get(AUTHORIZATION);
-      console.log(actionToken);
-      console.log(req.body);
+  
+      console.log(`${req.user} flag - 2`);
+      console.log(`${actionToken} flag - 3`);
+  
+  
+      // const {
+      //   token: tokenBD,
+      //   user_id,
+      //   token_type
+      // } = await Action_token.findOne({ token: actionToken });
+      
+      
       res.json('good');
     }catch (err) {
       next(err);

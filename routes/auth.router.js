@@ -24,6 +24,7 @@ router.post('/password/forgot',
   authController.sendMailForgotPassword
 );
 router.patch('/password/forgot/set',
+  userTokenMiddleware.checkActionToken,
   authController.setNewPasswordAfterForgot
 );
 

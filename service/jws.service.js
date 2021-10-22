@@ -6,8 +6,7 @@ const {
     JWT_REFRESH_SECRET,
     JWT_ACTION_SECRET
   },
-  tokenType: { ACCESS },
-  actionTokenType: { FORGOT_PASSWORD }
+  tokenType: { ACCESS, REFRESH, FORGOT_PASSWORD },
 } = require('../configs');
 const {
   ErrorHandler,
@@ -24,9 +23,26 @@ module.exports = {
       refresh_token
     };
   },
-  verifyToken: async (token, tokenType = ACCESS) => {
+  verifyToken: async (token, tokenType) => {
     try {
-      const secret = tokenType === ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
+      let secret = '';
+      
+      switch (tokenType) {
+        case ACCESS: {
+          secret = JWT_ACCESS_SECRET;
+          break;
+        }
+        case REFRESH: {
+          secret = JWT_REFRESH_SECRET;
+          break;
+        }
+        case FORGOT_PASSWORD: {
+          secret = JWT_ACTION_SECRET;
+          break;
+        }
+        default:
+          throw new ErrorHandler(wrongTT);
+      }
       
       await jwt.verify(token, secret);
     } catch (err) {

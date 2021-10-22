@@ -3,12 +3,15 @@ const {
     AUTHORIZATION
   },
   tokenType: {
-    REFRESH
+    ACCESS,
+    REFRESH,
+    FORGOT_PASSWORD
   }
 } = require('../configs');
 const { jwtService } = require('../service');
-const { errorMessage: { unauthorized } } = require('../errors');
+const { errorMessage: { unauthorized, badRequest } } = require('../errors');
 const { O_Auth } = require('../dataBase');
+const { checkForgotPassword } = require('../validators');
 
 module.exports = {
   checkAccessToken: async (req, res, next) => {
@@ -20,7 +23,7 @@ module.exports = {
         return;
       }
       
-      await jwtService.verifyToken(token);
+      await jwtService.verifyToken(token, ACCESS);
       
       const tokenResponse = await O_Auth.findOne(
         { access_token: token}
@@ -61,6 +64,42 @@ module.exports = {
       await O_Auth.remove({ refresh_token: token });
       
       req.user = tokenResponse.user_id;
+      next();
+    } catch (err) {
+      next(err);
+    }
+  },
+  
+  checkActionToken: async (req, res, next) => {
+    try {
+      const token = req.get(AUTHORIZATION);
+      
+      if(!token){
+        next(unauthorized);
+        return;
+      }
+      
+      console.log(token);
+      console.log(req.body);
+      
+      await jwtService.verifyToken(token, FORGOT_PASSWORD);
+      
+      
+      const { error, value } = checkForgotPassword.checkForgotPassword.validate(req.body);
+      console.log(`${value} flag - 0000`);
+  
+      if (error) {
+        next({
+          message: error.details[0].message,
+          status: badRequest.status
+        });
+        return;
+      }
+      
+      console.log(`${value} flag - 1`);
+      
+      req.user = value;
+      
       next();
     } catch (err) {
       next(err);
