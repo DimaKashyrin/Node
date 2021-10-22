@@ -4,7 +4,10 @@ module.exports = {
   
   JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || "def access",
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || "def refresh",
+  JWT_ACTION_SECRET: process.env.JWT_ACTION_SECRET || "def action",
   
   NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL,
-  NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD
+  NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD,
+  
+  FORGOT_PASSWORD_URL: 'http://localhost:3000/'
 };

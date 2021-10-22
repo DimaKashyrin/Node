@@ -35,6 +35,10 @@ module.exports = {
     message:'Email already exist',
     status: 409,
   },
+  wrongTT: {
+    message: 'Wrong token type',
+    status: 500
+  },
   templateName: {
     message: 'wrong template name'
   }

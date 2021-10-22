@@ -16,10 +16,16 @@ router.post('/refresh',
   userTokenMiddleware.checkRefreshToken,
   authController.refresh
 );
-
 router.delete('/delete',
   userTokenMiddleware.checkAccessToken,
   authController.deleteAccount
 );
+router.post('/password/forgot',
+  authController.sendMailForgotPassword
+);
+router.patch('/password/forgot/set',
+  authController.setNewPasswordAfterForgot
+);
+
 
 module.exports = router;

@@ -1,16 +1,29 @@
 const { jwtService, emailService} = require('../service');
 const { userNormalizer } = require('../util/user.util');
-const { O_Auth, User } = require('../dataBase');
+const { O_Auth, User, Action_token } = require('../dataBase');
 const {
   constants: {
     AUTHORIZATION
   },
   emailAction: {
     LOGIN,
-    DELETE_ACCOUNT
+    DELETE_ACCOUNT,
+    FORGOT_PASSWORD_EMAIL,
+  },
+  config: {
+    FORGOT_PASSWORD_URL
   }
 } = require('../configs');
-const { errorMessage: { unauthorized, noContent } } = require('../errors');
+const {
+  errorMessage: {
+    unauthorized,
+    noContent,
+    notFound
+  },
+  ErrorHandler
+} = require('../errors');
+const { FORGOT_PASSWORD } = require("../configs/action-token-type.enum");
+
 
 module.exports = {
   login: async (req, res, next) => {
@@ -50,6 +63,7 @@ module.exports = {
       next(err);
     }
   },
+  
   refresh: async (req, res, next) => {
     try {
       const { user } = req;
@@ -80,6 +94,46 @@ module.exports = {
       await emailService.sendMail(req.user.email, DELETE_ACCOUNT,{ name });
   
       res.sendStatus(noContent.status);
+    }catch (err) {
+      next(err);
+    }
+  },
+  
+  sendMailForgotPassword: async (req, res, next) => {
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+      
+      if(!user) {
+        throw new ErrorHandler(notFound);
+      }
+      
+      const actionToken = jwtService.generateActionToken(FORGOT_PASSWORD);
+      
+      await Action_token.create({
+        token: actionToken,
+        token_type: FORGOT_PASSWORD,
+        user_id: user._id
+      });
+      
+      await emailService.sendMail(
+        email,
+        FORGOT_PASSWORD_EMAIL,
+        { urlForgot: `${ FORGOT_PASSWORD_URL }passwordForgot?token=${ actionToken }` }
+      );
+      
+      res.json('ok');
+    }catch (err) {
+      next(err);
+    }
+  },
+  
+  setNewPasswordAfterForgot: (req, res, next) => {
+    try {
+      const actionToken = req.get(AUTHORIZATION);
+      console.log(actionToken);
+      console.log(req.body);
+      res.json('good');
     }catch (err) {
       next(err);
     }

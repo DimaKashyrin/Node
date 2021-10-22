@@ -2,7 +2,8 @@ const {
   WELCOME,
   CHANGE_NAME,
   LOGIN,
-  DELETE_ACCOUNT
+  DELETE_ACCOUNT,
+  FORGOT_PASSWORD_EMAIL
 } = require('../configs/email-action.enum');
 
 module.exports = {
@@ -21,5 +22,9 @@ module.exports = {
   [ DELETE_ACCOUNT ]: {
     templateName: 'delete-account',
     subject: 'Delete account'
+  },
+  [ FORGOT_PASSWORD_EMAIL ]: {
+    templateName: 'forgot-password',
+    subject: 'You forgot password? Dont worry!!!'
   },
 };

@@ -3,11 +3,16 @@ const jwt = require('jsonwebtoken');
 const {
   config: {
     JWT_ACCESS_SECRET,
-    JWT_REFRESH_SECRET
+    JWT_REFRESH_SECRET,
+    JWT_ACTION_SECRET
   },
-  tokenType: { ACCESS }
+  tokenType: { ACCESS },
+  actionTokenType: { FORGOT_PASSWORD }
 } = require('../configs');
-const ErrorHandler = require('../errors/ErrorHandler');
+const {
+  ErrorHandler,
+  errorMessage: { wrongTT, unauthorized }
+} = require('../errors');
 
 module.exports = {
   generateTokenPair: () => {
@@ -22,9 +27,18 @@ module.exports = {
   verifyToken: async (token, tokenType = ACCESS) => {
     try {
       const secret = tokenType === ACCESS ? JWT_ACCESS_SECRET : JWT_REFRESH_SECRET;
+      
       await jwt.verify(token, secret);
     } catch (err) {
-      throw new ErrorHandler('invalid token ----flag', 401);
+      throw new ErrorHandler(unauthorized);
     }
+  },
+  generateActionToken: (actionTokType) => {
+    if (actionTokType !== FORGOT_PASSWORD) {
+      throw new ErrorHandler(wrongTT);
+    }
+  
+    return jwt.sign({}, JWT_ACTION_SECRET, {expiresIn: '24h'});
   }
 };
+
