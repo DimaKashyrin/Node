@@ -1,7 +1,7 @@
 const { User, O_Auth } = require('../dataBase');
 const { passwordService, emailService } = require('../service');
 const normalizer = require('../util/user.util');
-const { emailAction: { WELCOME, CHANGE_NAME } }= require("../configs");
+const { emailAction: { CHANGE_NAME, WELCOME } }= require("../configs");
 const { errorMessage: { created, noContent } } = require('../errors');
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
   
   createUser: async (req, res, next) => {
     try {
-      const { password, name } = req.body;
+      const { password } = req.body;
       const hashedPassword = await passwordService.hash(password);
       
       await emailService.sendMail(req.body.email, WELCOME, { name });
@@ -34,7 +34,7 @@ module.exports = {
       const newUser = await User.create({ ...req.body, password: hashedPassword });
       const normalizerUser = normalizer.userNormalizer(newUser.toObject());
       
-      res.status(created.status).json(normalizerUser);
+      res.sendStatus(created.status).json(normalizerUser);
     } catch (err) {
       next(err);
     }
@@ -55,7 +55,7 @@ module.exports = {
   
       await emailService.sendMail(req.user.email, CHANGE_NAME,{ name });
       
-      res.status(created.status).json(normaliserUpdateUser);
+      res.sendStatus(created.status).json(normaliserUpdateUser);
     } catch (err) {
       next(err);
     }

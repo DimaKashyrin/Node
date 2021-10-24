@@ -79,14 +79,9 @@ module.exports = {
         return;
       }
       
-      console.log(token);
-      console.log(req.body);
-      
       await jwtService.verifyToken(token, FORGOT_PASSWORD);
       
-      
       const { error, value } = checkForgotPassword.checkForgotPassword.validate(req.body);
-      console.log(`${value} flag - 0000`);
   
       if (error) {
         next({
@@ -96,10 +91,7 @@ module.exports = {
         return;
       }
       
-      console.log(`${value} flag - 1`);
-      
-      req.user = value;
-      
+      req.newPassword = value;
       next();
     } catch (err) {
       next(err);

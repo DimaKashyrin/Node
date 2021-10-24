@@ -1,4 +1,4 @@
-const { jwtService, emailService} = require('../service');
+const { jwtService, emailService, passwordService } = require('../service');
 const { userNormalizer } = require('../util/user.util');
 const { O_Auth, User, Action_token } = require('../dataBase');
 const {
@@ -18,7 +18,8 @@ const {
   errorMessage: {
     unauthorized,
     noContent,
-    notFound
+    notFound,
+    created
   },
   ErrorHandler
 } = require('../errors');
@@ -122,28 +123,26 @@ module.exports = {
         { urlForgot: `${ FORGOT_PASSWORD_URL }passwordForgot?token=${ actionToken }` }
       );
       
-      res.json('ok');
+      res.sendStatus(created.status);
     }catch (err) {
       next(err);
     }
   },
   
-  setNewPasswordAfterForgot: (req, res, next) => {
+  setNewPasswordAfterForgot: async (req, res, next) => {
     try {
+      const {password: newPassword} = req.newPassword;
+      const hashedPassword = await passwordService.hash(newPassword);
       const actionToken = req.get(AUTHORIZATION);
   
-      console.log(`${req.user} flag - 2`);
-      console.log(`${actionToken} flag - 3`);
+      const findObjAction = await Action_token.findOne({actionToken});
   
+      await O_Auth.deleteMany(findObjAction.user_id);
+      await Action_token.deleteOne(findObjAction.user_id);
+      
+      await User.findOneAndUpdate(findObjAction.user_id, {password: hashedPassword});
   
-      // const {
-      //   token: tokenBD,
-      //   user_id,
-      //   token_type
-      // } = await Action_token.findOne({ token: actionToken });
-      
-      
-      res.json('good');
+      res.sendStatus(created.status);
     }catch (err) {
       next(err);
     }
