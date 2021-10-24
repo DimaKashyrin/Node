@@ -26,15 +26,14 @@ module.exports = {
   
   createUser: async (req, res, next) => {
     try {
-      const { password } = req.body;
+      const { password, name } = req.body;
       const hashedPassword = await passwordService.hash(password);
       
       await emailService.sendMail(req.body.email, WELCOME, { name });
       
-      const newUser = await User.create({ ...req.body, password: hashedPassword });
-      const normalizerUser = normalizer.userNormalizer(newUser.toObject());
+      await User.create({ ...req.body, password: hashedPassword });
       
-      res.sendStatus(created.status).json(normalizerUser);
+      res.sendStatus(created.status);
     } catch (err) {
       next(err);
     }
@@ -45,17 +44,14 @@ module.exports = {
       const { user_id } = req.params;
       const { name } = req.body;
       
-      const updateUser = await User.findByIdAndUpdate(
+      await User.findByIdAndUpdate(
         user_id,
-        req.body,
-        { new: true }
-      ).lean();
+        req.body
+      );
       
-      const normaliserUpdateUser = normalizer.userNormalizer(updateUser);
-  
       await emailService.sendMail(req.user.email, CHANGE_NAME,{ name });
       
-      res.sendStatus(created.status).json(normaliserUpdateUser);
+      res.sendStatus(created.status);
     } catch (err) {
       next(err);
     }
