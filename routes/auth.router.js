@@ -1,7 +1,11 @@
 const router = require('express').Router();
 
 const { authController } = require('../controllers');
-const { loginMiddleware, userTokenMiddleware } = require('../middlewares/');
+const {
+  loginMiddleware,
+  userTokenMiddleware,
+  forgotValuesMiddleware
+} = require('../middlewares/');
 
 router.post('/login',
   loginMiddleware.checkUserValuesValid,
@@ -21,10 +25,12 @@ router.delete('/delete',
   authController.deleteAccount
 );
 router.post('/password/forgot',
+  forgotValuesMiddleware.isValidForgotEmail,
   authController.sendMailForgotPassword
 );
-router.patch('/password/forgot/set',
+router.patch('/password/forgot',
   userTokenMiddleware.checkActionToken,
+  forgotValuesMiddleware.isValidForgotPassword,
   authController.setNewPasswordAfterForgot
 );
 

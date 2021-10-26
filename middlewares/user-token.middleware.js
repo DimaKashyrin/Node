@@ -9,9 +9,8 @@ const {
   }
 } = require('../configs');
 const { jwtService } = require('../service');
-const { errorMessage: { unauthorized, badRequest } } = require('../errors');
+const { errorMessage: { unauthorized } } = require('../errors');
 const { O_Auth } = require('../dataBase');
-const { checkForgotPassword } = require('../validators');
 
 module.exports = {
   checkAccessToken: async (req, res, next) => {
@@ -81,17 +80,6 @@ module.exports = {
       
       await jwtService.verifyToken(token, FORGOT_PASSWORD);
       
-      const { error, value } = checkForgotPassword.checkForgotPassword.validate(req.body);
-  
-      if (error) {
-        next({
-          message: error.details[0].message,
-          status: badRequest.status
-        });
-        return;
-      }
-      
-      req.newPassword = value;
       next();
     } catch (err) {
       next(err);

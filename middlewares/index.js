@@ -5,4 +5,5 @@ module.exports = {
   userNameMiddleware: require('./user-name.middleware'),
   userRolesMiddleware: require('./user-role.middleware'),
   userTokenMiddleware: require('./user-token.middleware'),
+  forgotValuesMiddleware: require('./forgot-user-value.middleware')
 };
