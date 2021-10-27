@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const swaggerUI = require('swagger-ui-express');
 require('dotenv').config();
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -12,6 +13,7 @@ const { userRouter , authRouter } = require('./routes');
 const { ErrorHandler } = require('./errors');
 const createDefaultDate = require('./util/default-data.util');
 const startCron = require('./cron');
+const swaggerJson = require('./docs/swagger.json');
 
 
 mongoose.connect(MONGO_CONNECT_URL);
@@ -26,6 +28,7 @@ app.use(cors({ origin: _configureCors }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerJson));
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
 // eslint-disable-next-line no-unused-vars

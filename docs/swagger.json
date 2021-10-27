@@ -1,0 +1,129 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "My project documents",
+    "description": "testing....",
+    "contact": {
+      "email": "test@mail.ua",
+      "name": "Dmytro"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "operationId": "createUser",
+        "description": "this is create user",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "default": "Tom",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "default": "example@email.com",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "default": "Hello_World1!",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was created",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "just an error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "operationId": "getAllUsers",
+        "description": "show all users",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "default": 1,
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "default": 20,
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleUser"
+              }
+            }
+          },
+          "400": {
+            "description": "just an error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "singleUser": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "12345some",
+          "description": "MongoDB ID"
+        },
+        "email": {
+          "type": "string",
+          "example": "example@email.com"
+        },
+        "name": {
+          "type": "string",
+          "example": "Tom"
+        }
+      }
+    },
+    "commonError": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "something wrong"
+        },
+        "code": {
+          "type": "number",
+          "example": 400
+        }
+      }
+    }
+  }
+}
