@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const { PASSWORD_REGEXP } = require('../configs/constans');
 
-const checkForgotPassword = Joi.object({
+const isValidForgotPassword = Joi.object({
   password: Joi
     .string()
     .regex(PASSWORD_REGEXP)
@@ -11,5 +11,5 @@ const checkForgotPassword = Joi.object({
 });
 
 module.exports = {
-  checkForgotPassword
+  isValidForgotPassword
 };

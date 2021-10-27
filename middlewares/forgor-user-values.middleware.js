@@ -23,7 +23,7 @@ module.exports = {
   
   isValidForgotPassword: (req, res, next) => {
     try {
-      const {error, value} = checkForgotPassword.isValidForgotPassword.validate(req.body);
+      const { error, value } = checkForgotPassword.isValidForgotPassword.validate(req.body);
       
       if (error) {
         next({
