@@ -4,9 +4,8 @@ const {
   config: { DEFAULT_ADMIN_PASSWORD }
 } = require('../configs');
 
-
 module.exports = async () => {
-  const user = await User.findOne( {role: ADMIN});
+  const user = await User.findOne( { role: ADMIN });
   
   if (!user) {
     await User.create({

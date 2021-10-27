@@ -135,12 +135,12 @@ module.exports = {
       const hashedPassword = await passwordService.hash(newPassword);
       const actionToken = req.get(AUTHORIZATION);
   
-      const findObjAction = await Action_token.findOne({actionToken});
+      const { user_id } = await Action_token.findOne({actionToken});
   
-      await O_Auth.deleteMany(findObjAction.user_id);
-      await Action_token.deleteOne(findObjAction.user_id);
+      await O_Auth.deleteMany(user_id);
+      await Action_token.deleteOne(user_id);
       
-      await User.findOneAndUpdate(findObjAction.user_id, {password: hashedPassword});
+      await User.findOneAndUpdate({_id: user_id}, { password: hashedPassword });
   
       res.sendStatus(created.status);
     }catch (err) {

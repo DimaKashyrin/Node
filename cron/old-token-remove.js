@@ -6,9 +6,8 @@ dayJs.extend(utc);
 const { O_Auth } = require('../dataBase');
 
 module.exports = async () => {
-  const previousWeek = dayJs.utc().subtract(7, 'day');
-  
+  const previousMonth = dayJs.utc().subtract(1, 'month');
   await O_Auth.deleteMany({
-    createdAt:{$lt: previousWeek},
+    createdAt:{$lt: previousMonth},
   });
 };

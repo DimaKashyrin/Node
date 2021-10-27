@@ -23,7 +23,7 @@ router.delete('/delete',
 router.post('/password/forgot',
   authController.sendMailForgotPassword
 );
-router.patch('/password/forgot/set',
+router.patch('/password/forgot',
   userTokenMiddleware.checkActionToken,
   authController.setNewPasswordAfterForgot
 );
