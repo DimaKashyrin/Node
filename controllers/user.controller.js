@@ -1,20 +1,25 @@
 const { User, O_Auth } = require('../dataBase');
-const { emailService } = require('../service');
+const { emailService, userService } = require('../service');
 const normalizer = require('../util/user.util');
 const { emailAction: { CHANGE_NAME, WELCOME } }= require('../configs');
 const { errorMessage: { created, noContent } } = require('../errors');
 
 module.exports = {
-  getUsers: async (req, res) => {
-    const usersDB = await User.find().lean();
-    const usersPrepare = [];
-
-    if (usersDB.length) {
-      usersDB.forEach((user) => {
-        usersPrepare.push(normalizer.userNormalizer(user));
-      });
+  getUsers: async (req, res, next) => {
+    try {
+      const users = await userService.getAllUsers(req.query).lean();
+      
+      const usersPrepare = [];
+      
+      if (users.length) {
+        users.forEach((user) => {
+          usersPrepare.push(normalizer.userNormalizer(user));
+        });
+      }
       
       res.json(usersPrepare);
+    }catch (err) {
+      next(err);
     }
   },
   
