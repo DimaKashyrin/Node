@@ -1,5 +1,9 @@
 const { User, O_Auth } = require('../dataBase');
-const { emailService, userService } = require('../service');
+const {
+  emailService,
+  s3Service,
+  userService
+} = require('../service');
 const normalizer = require('../util/user.util');
 const { emailAction: { CHANGE_NAME, WELCOME } }= require('../configs');
 const { errorMessage: { created, noContent } } = require('../errors');
@@ -35,9 +39,14 @@ module.exports = {
       
       await emailService.sendMail(req.body.email, WELCOME, { name });
       
-      await User.createUserWithHashPassword({ ...req.body });
+      let newUser = await User.createUserWithHashPassword({ ...req.body });
       
-      res.sendStatus(created.status);
+      if (req.files && req.files.avatar) {
+        const uploadInfo = await s3Service.uploadImage(req.files.avatar, 'users', newUser._id.toString());
+        newUser = await User.findByIdAndUpdate(newUser._id, { avatar: uploadInfo.Location }, {new: true} );
+      }
+      
+      res.json(newUser);
     } catch (err) {
       next(err);
     }

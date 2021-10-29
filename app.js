@@ -1,9 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUI = require('swagger-ui-express');
-require('dotenv').config();
+const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+require('dotenv').config();
 
 const {
   config:{ MONGO_CONNECT_URL ,PORT, ALLOWED_ORIGIN, NODE_ENV },
@@ -15,10 +16,13 @@ const createDefaultDate = require('./util/default-data.util');
 const startCron = require('./cron');
 const swaggerJson = require('./docs/swagger.json');
 
-mongoose.connect(MONGO_CONNECT_URL);
+mongoose.connect(MONGO_CONNECT_URL).then(() => {
+  console.log('Mongo connected successfully');
+});
 
 const app = express();
 
+app.use(fileUpload({}));
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100

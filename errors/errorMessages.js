@@ -41,5 +41,11 @@ module.exports = {
   },
   templateName: {
     message: 'wrong template name'
+  },
+  notSF: {
+    message: 'Not supported format'
+  },
+  maxSizePhoto: {
+    message: ' - file is too big'
   }
 };

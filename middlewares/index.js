@@ -5,5 +5,6 @@ module.exports = {
   userNameMiddleware: require('./user-name.middleware'),
   userRolesMiddleware: require('./user-role.middleware'),
   userTokenMiddleware: require('./user-token.middleware'),
-  forgotValuesMiddleware: require('./forgor-user-values.middleware')
+  forgotValuesMiddleware: require('./forgor-user-values.middleware'),
+  fileMiddleware: require('./file.middleware')
 };

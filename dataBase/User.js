@@ -25,9 +25,10 @@ const loginUserSchema = new Schema({
     default: userRoles.USER,
     enum: Object.values(userRoles)
   },
-  age: {
-    type: Number
-  }
+  avatar: {
+    type: String
+  },
+  
 }, {timestamps: true});
 
 loginUserSchema.statics = {

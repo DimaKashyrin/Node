@@ -5,7 +5,8 @@ const {
   userEmailMiddleware,
   userIdMiddleware,
   userNameMiddleware,
-  userRolesMiddleware
+  userRolesMiddleware,
+  fileMiddleware
 } = require('../middlewares');
 const { userRoles:{ ADMIN, MANAGER } } = require('../configs');
 
@@ -14,6 +15,7 @@ router.get('/',
 );
 router.post('/',
   userEmailMiddleware.isUserBodyValid,
+  fileMiddleware.checkUserAvatar,
   userEmailMiddleware.createUserEmail,
   userController.createUser
 );

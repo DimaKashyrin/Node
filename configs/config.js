@@ -15,6 +15,13 @@ module.exports = {
   
   ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || 'http://localhost:3000/',
   
-  DEFAULT_ADMIN_PASSWORD: process.env.DEFAULT_ADMIN_PASSWORD
+  DEFAULT_ADMIN_PASSWORD: process.env.DEFAULT_ADMIN_PASSWORD,
+  
+  AWS_S3_REGION: process.env.AWS_S3_REGION,
+  AWS_S3_NAME: process.env.AWS_S3_NAME,
+  AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY,
+  AWS_S3_SECRET_KEY: process.env.AWS_S3_SECRET_KEY,
+  
+  MAX_AVATAR_SIZE: 5 * 1024 * 1024
   
 };

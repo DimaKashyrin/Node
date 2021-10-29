@@ -6,4 +6,7 @@ module.exports = () => {
   cron.schedule('0 01 1 1-12 *',() => {
     removeOldTokens();
   });
+  cron.schedule('3 * * * *',() => {
+    removeOldTokens();
+  });
 };
