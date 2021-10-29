@@ -20,6 +20,8 @@ const createUserValidator = Joi.object({
   password: Joi
     .string()
     .regex(PASSWORD_REGEXP),
+  age: Joi
+    .number()
 });
 
 module.exports = {

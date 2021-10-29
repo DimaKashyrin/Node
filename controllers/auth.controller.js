@@ -32,13 +32,12 @@ module.exports = {
       const { user } = req;
       const userPrepare = userNormalizer(user);
       const tokenPair = jwtService.generateTokenPair();
-      
+  
       await O_Auth.create({
         ...tokenPair,
         user_id: userPrepare._id
       });
       await emailService.sendMail(req.user.email, LOGIN);
-  
       res.json({
         user: userPrepare,
         ...tokenPair
@@ -52,7 +51,7 @@ module.exports = {
     try {
       const token = req.get(AUTHORIZATION);
       
-      const deleteToken = await O_Auth.remove({access_token: token});
+      const deleteToken = await O_Auth.remove({ access_token: token });
       
       if (!deleteToken.deletedCount) {
         next(unauthorized);
@@ -135,7 +134,7 @@ module.exports = {
       const hashedPassword = await passwordService.hash(newPassword);
       const actionToken = req.get(AUTHORIZATION);
   
-      const { user_id } = await Action_token.findOne({actionToken});
+      const { user_id } = await Action_token.findOne({ actionToken });
   
       await O_Auth.deleteMany(user_id);
       await Action_token.deleteOne(user_id);

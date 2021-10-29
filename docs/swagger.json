@@ -3,10 +3,10 @@
   "info": {
     "version": "1.0",
     "title": "My project documents",
-    "description": "testing....",
+    "description": "",
     "contact": {
       "email": "test@mail.ua",
-      "name": "Dmytro"
+      "name": "Dima"
     }
   },
   "paths": {
@@ -39,11 +39,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "User was created",
-            "schema": {
-              "$ref": "#/definitions/singleUser"
-            }
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "just an error",
@@ -68,16 +65,53 @@
           {
             "name": "perPage",
             "in": "query",
-            "default": 20,
+            "default": 5,
             "required": false,
             "type": "number"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "default": "desc",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "age.gte",
+            "in": "query",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "age.lte",
+            "in": "query",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
-          "200": {
-            "description": "User was found",
+          "201": {
+            "description": "Users was found",
             "schema": {
-              "type": "array",
+              "type": "string",
               "items": {
                 "$ref": "#/definitions/singleUser"
               }
@@ -91,6 +125,291 @@
           }
         }
       }
+    },
+    "/users/{:user_id}": {
+      "get": {
+        "tags": ["Users"],
+        "operationId": "getUserById",
+        "description": "get user by Id",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "MongoDB ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was found",
+            "schema": {
+                "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Users"],
+        "operationId": "UpdateName",
+        "description": "Update user name",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "name has been updated"
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "operationId": "DeleteUserById",
+        "description": "Delete user by Id",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Only users have permission to delete role: [ADMIN or MANAGER]"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User has been deleted"
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      }
+      },
+
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "userLogin",
+        "description": "Login user",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "default": "example@mail.com",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "default": "HelloWorld1234_!",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was login",
+            "schema": {
+              "$ref": "#/definitions/loginUser"
+            }
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "userLogout",
+        "description": "Logout user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "enter `access_token`",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged out"
+
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "refreshToken",
+        "description": "Refresh user token",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "enter `refresh_token`",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user-id, access_toke, refresh_token",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "description": "MongoDB id",
+                  "example": "617a99505e58ebffaf39d82b"
+                },
+                "access_token": {
+                  "type": "string",
+                  "example": "fnnejhrf837flnln2-hv75t3p2nf0"
+                },
+                "refresh_token": {
+                  "type": "string",
+                  "example": "lw1324h4pjgjdf9'nvjfkg7jti84809"
+                }
+              }
+            }
+
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/forgot": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "forgotPassword",
+        "description": "enter the email address to which you forgot your password",
+        "parameters": [
+          {
+            "name": "Email",
+            "in": "formData",
+            "description": "enter email",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "sent a link with an `actionToken` to the address of the entered mail "
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Auth"],
+        "operationId": "updatePassword",
+        "description": "Update user password",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "enter `action_token`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "enter new password"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "password has been updated"
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      }
+
+    },
+    "/auth/delete": {
+      "delete": {
+        "tags": ["Auth"],
+        "operationId": "deleteAccount",
+        "description": "Delete user account",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "enter `access_token`",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Account was delete"
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/commonError"
+            }
+          }
+        }
+      }
+
     }
   },
   "definitions": {
@@ -109,6 +428,72 @@
         "name": {
           "type": "string",
           "example": "Tom"
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "XXXX-XX-XXTXX:XX:XX.XXXZ"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "XXXX-XX-XXTXX:XX:XX.XXXZ"
+        },
+        "__v": {
+          "type": "number",
+          "example": 0
+        },
+        "age": {
+          "type": "number",
+          "example": 18
+        }
+      }
+    },
+    "loginUser": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "12345some",
+          "description": "MongoDB ID"
+        },
+        "email": {
+          "type": "string",
+          "example": "example@email.com"
+        },
+        "name": {
+          "type": "string",
+          "example": "Tom"
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "XXXX-XX-XXTXX:XX:XX.XXXZ"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "XXXX-XX-XXTXX:XX:XX.XXXZ"
+        },
+        "__v": {
+          "type": "number",
+          "example": 0
+        },
+        "age": {
+          "type": "number",
+          "example": 18
+        },
+        "access_token": {
+          "type": "string",
+          "example": "djvevoeeui58392fh35u63-05unefvfj38"
+        },
+        "refresh_token": {
+          "type": "string",
+          "example": "vmdfjpoj57epdj209jf;d;lsvsdvob9rii8"
         }
       }
     },

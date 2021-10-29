@@ -32,7 +32,7 @@ module.exports = {
         next(wrongEorP);
         return;
       }
-      
+  
       req.user = userByEmail;
       next();
     } catch (err) {
@@ -46,6 +46,7 @@ module.exports = {
       const { password: hashPassword } = req.user;
       
       await passwordService.compare(password, hashPassword);
+  
       next();
     } catch (err) {
       next(err);

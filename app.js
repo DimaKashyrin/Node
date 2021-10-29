@@ -15,7 +15,6 @@ const createDefaultDate = require('./util/default-data.util');
 const startCron = require('./cron');
 const swaggerJson = require('./docs/swagger.json');
 
-
 mongoose.connect(MONGO_CONNECT_URL);
 
 const app = express();
